@@ -10,14 +10,14 @@
          <div>{{ message }}</div>
       {% endfor %}
 
-      <form action="{{url_for("result")}}" method = GET>
+      <form action="{{url_for("result")}}" >
          <fieldset>
             <legend style = "font-size:30px;
             font-weight:bold; padding-top:10px;
             text-center; ">{{title}}</legend>
             {{ form.hidden_tag() }}
 
-            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+            <div style = "font-size:20px; font-weight:bold; margin-left:150px;width:200px;">
                {{ form.origin.label }}<br>
                {{ origin_iata }}
                <br>
@@ -39,7 +39,7 @@
                <input style=" padding-left: 50px"
                type="checkbox" checked="checked" disabled />
                {% else: %}
-               <input  style=" padding-left: 50px;width: 18px; height: 18px;"
+               <input  style=" padding-left: 50px;"
                type="checkbox" checked="unchecked" disabled />
                {% endif %}
                <br>
