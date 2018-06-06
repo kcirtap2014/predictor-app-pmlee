@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block corps %}
+<div class="container " >
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      {#<div>{{ error }}</div> #}
+
+      {% for message in form.dest.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+
+      <form action="{{url_for("result")}}" method = GET>
+         <fieldset>
+            <legend style = "font-size:30px;
+            font-weight:bold; padding-top:10px;
+            text-center; ">{{title}}</legend>
+            {{ form.hidden_tag() }}
+
+            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+               {{ form.origin.label }}<br>
+               {{ origin_iata }}
+               <br>
+
+               {{ form.dest.label }} <br>
+               {{ dest_iata }}<br>
+               {{ form.carrier.label }} <br>
+               {{ carrier }}<br>
+               {{ form.dep_day.label }}<br>
+               {{ date }}
+               <br>
+
+               {{ form.dep_time.label }}<br>
+               {{ time }}
+               <br>
+
+               {{ form.departed.label }}
+               {% if departed: %}
+               <input style=" padding-left: 50px;width: 18px; height: 18px;"
+               type="checkbox" checked="checked" disabled />
+               {% else: %}
+               <input  style=" padding-left: 50px;width: 18px; height: 18px;"
+               type="checkbox" checked="unchecked" disabled />
+               {% endif %}
+               <br>
+               <div style = "font-size:20px; font-weight:bold;">Predicted delay</div><div style="width:200px;">
+                   {{y_pred}} min (+/-{{rmse_score_test}} min)
+               </div>
+
+            </div>
+
+         </fieldset>
+      </form>
+     </div>
+    </div>
+</div>
+
+{% endblock %}

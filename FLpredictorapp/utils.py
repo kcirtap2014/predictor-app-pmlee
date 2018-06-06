@@ -2,15 +2,18 @@ import pandas as pd
 import logging as lg
 import numpy as np
 
-from .models import Airports, init_db, load_joblib, load_data
+from .models import  load_joblib, load_data
 
-def load_airports():
-    init_db()
-    return Airports.query.all()
+def origin_dest_list(df):
+    origin_col = ["ORIGIN_IATA", "ORIGIN_CITY", "ORIGIN_STATE"]
+    dest_col = ["DEST_IATA", "DEST_CITY", "DEST_STATE"]
+    df_origin = df.drop_duplicates(subset=["ORIGIN_IATA"])[origin_col]
+    df_dest = df.drop_duplicates(subset=["DEST_IATA"])[dest_col]
 
-def predict(origin_iata, dest_iata, date, time, departed, carrier):
+    return df_origin, df_dest
 
-    if departed == "True/":
+def load_models(departed):
+    if departed=="True":
         model = load_joblib('lr_past_departed.sav')
         meta  = load_joblib('meta_past_departed.pkl')
         score = load_joblib('score_lr_past_departed.pkl')
@@ -20,7 +23,13 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
         meta  = load_joblib('meta_past_.pkl')
         score = load_joblib('score_lr_past_.pkl')
         df = load_data('past_train_df_.csv')
-    lg.warning(departed == "True/")
+
+    return model, meta, score, df
+
+def predict(origin_iata, dest_iata, date, time, departed, carrier):
+
+    model, meta, score, df = load_models(departed)
+
     input_columns = meta
     rmse_score_test = score['rmse_score_test']
 
@@ -38,7 +47,7 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
 
     time_features = [ "DEP_TIME_NIGHT", "DEP_TIME_TWILIGHT", "DEP_TIME_MORNING","DEP_TIME_NOON","DEP_TIME_AFTERNOON", "DEP_TIME_EVENING"]
     delay_features = ['CARRIER_DELAY', 'WEATHER_DELAY', 'NAS_DELAY', 'SECURITY_DELAY', 'LATE_AIRCRAFT_DELAY', 'DEP_DELAY','ARR_DELAY']
-    lg.warning(departed)
+
     # core core_features
     input_vector[input_columns["DAY_OF_MONTH"]] = int(dayofmonth)
     input_vector[input_columns["DAY_OF_WEEK"]] = int(dayofweek)
@@ -65,7 +74,7 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
         input_vector[input_columns['Q3_'+ feature]] = df_delay['Q3_'+ feature]
         input_vector[input_columns['Q95_'+ feature]] = df_delay['Q95_'+ feature]
 
-        if departed =="True/" and feature != "ARR_DELAY":
+        if departed=="True" and feature != "ARR_DELAY":
             input_vector[input_columns[feature]] = df_delay[feature]
 
     # prediction
