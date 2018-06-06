@@ -10,4 +10,4 @@ if os.environ.get('DATABASE_URL') is None:
 
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-    DATABASE_URI = '/FLpredictorapp/static/db/'
+    DATABASE_URI = './FLpredictorapp/static/db/'
