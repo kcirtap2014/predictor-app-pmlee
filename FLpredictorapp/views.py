@@ -26,12 +26,12 @@ def index():
     if request.method == 'POST':
         if form.validate() == False:
             flash('All fields are required.')
-            return render_template('contact.html',  title = "Airline Delay",
+            return render_template('contact.html',  title = "Airline Delay Predictor",
                     form = form)
         else:
             return redirect('result.html')
 
-    return render_template('index.html',  title = "Airline Delay",
+    return render_template('index.html',  title = "Airline Delay Predictor",
             form = form)
 
 @app.route('/result', methods= ['GET','POST'])
