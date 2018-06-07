@@ -12,32 +12,32 @@
 
       <form action="{{url_for("result")}}" method = "post">
          <fieldset>
-            <legend style = "font-size:30px;
-            font-weight:bold; padding-top:10px;
+            <legend style = "font-size:40px;
+            font-weight:bolder;
             text-center; ">{{title}}</legend>
             {{ form.hidden_tag() }}
 
-            <div style = "font-size:20px; font-weight:bold;width:200px;">
+            <div >
                {{ form.origin.label }}<br>
                {{ form.origin }}
-               <br>
 
                {{ form.dest.label }} <br>
                {{ form.dest }}
+
                {{ form.carrier.label }} <br>
                {{ form.carrier }}
-               {{ form.dep_day.label }}<br>
+
+                {{ form.dep_day.label }}<br>
                {{ form.dep_day }}
-               <br>
 
-               {{ form.dep_time.label }}<br>
+                {{ form.dep_time.label }}<br>
                {{ form.dep_time }}
-               <br>
 
-               {{ form.departed.label }}
-               <input style=" padding-left: 50px;"
-               type="checkbox" name="departed" value=True />
+               <a>{{ form.departed.label }} <input type="checkbox" name="departed" value=True />
                <input type="hidden" name="departed" value=False />
+               <div style="height:1px;font-size:10px;">Check if flight has departed</div></a>
+
+
                <br>
 
                {{ form.submit }}
