@@ -33,9 +33,10 @@
                 {{ form.dep_time.label }}<br>
                {{ form.dep_time }}
 
-               <a>{{ form.departed.label }} <input type="checkbox" name="departed" value=True />
-               <input type="hidden" name="departed" value=False />
-               <div style="height:1px;font-size:10px;">Check if flight has departed</div></a>
+               {{ form.departed.label }}
+                   <input type="checkbox" name="departed" value=True />
+                   <input type="hidden" name="departed" value=False />
+               <div style="height:1px;font-size:10px;">Check if flight has departed</div>
 
 
                <br>

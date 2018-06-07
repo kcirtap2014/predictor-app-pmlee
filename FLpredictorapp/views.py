@@ -48,9 +48,8 @@ def result():
     origin = origin_iata.split(",")
     dest = dest_iata.split(",")
     carrier = carrier.split(",")
-    lg.warning(origin_iata)
-    lg.warning(origin)
-    lg.warning(carrier)
+
+    lg.warning(departed)
     # predict
     y_pred, rmse_score_test = predict(origin[0], dest[0], date, time,
                                      departed, carrier[1])
@@ -64,6 +63,6 @@ def result():
 
     return render_template('result.html', title = "Airline Info", form=form,
                             origin_iata=w_origin, dest_iata=w_dest,
-                            time=time, date=date,departed=departed,
+                            time=time, date=date, departed=departed,
                             carrier=w_carrier, y_pred=y_pred,
                             rmse_score_test=rmse_score_test)
