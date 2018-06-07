@@ -35,11 +35,11 @@
                 <br>
 
                 {{ form.departed.label }}
-                {{departed}}
+
                 {% if departed=="True": %}
-                <input type="checkbox" checked="checked" disabled />
+                <input type="checkbox" checked disabled />
                 {% else: %}
-                <input type="checkbox" checked="unchecked" disabled />
+                <input type="checkbox"  disabled />
                 {% endif %}
                 <div>Predicted delay</div>
                     <a>{{y_pred}} min (+/-{{rmse_score_test}} min)</a>

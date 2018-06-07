@@ -47,3 +47,8 @@ input#submit {
     text-align: justify;
     font-family: 'PT Serif', serif;
 }
+
+a {
+    font-size: 20px;
+    font-weight: normal;
+}
