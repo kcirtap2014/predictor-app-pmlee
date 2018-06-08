@@ -6,8 +6,16 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 if os.environ.get('DATABASE_URL') is None:
     basedir = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_BINDS = {
+        'origin': 'sqlite:///' + os.path.join(basedir, 'origin.db'),
+        'dest': 'sqlite:///' + os.path.join(basedir, 'dest.db')
+    }
     DATABASE_URI = os.path.join(basedir, 'FLpredictorapp/static/db/')
 
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_BINDS = {
+        'origin':    SQLALCHEMY_DATABASE_URI + '/origin.db',
+        'dest':      SQLALCHEMY_DATABASE_URI + '/dest.db'
+    }
     DATABASE_URI = './FLpredictorapp/static/db/'

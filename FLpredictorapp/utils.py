@@ -1,6 +1,7 @@
 import pandas as pd
 import logging as lg
 import numpy as np
+import pdb
 
 from .models import load_joblib, load_data, Airports, Origins, Dests
 
@@ -13,7 +14,7 @@ def airport_list():
 
     for airport in Dests.query.all():
         dest_list.append([airport.iata, airport.city, airport.state])
-
+        
     return origin_list, dest_list
 
 def load_models(departed):

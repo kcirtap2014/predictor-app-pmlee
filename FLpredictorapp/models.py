@@ -22,6 +22,7 @@ class Airports(db.Model):
         self.carrier = carrier
 
 class Origins(db.Model):
+    __bind_key__ = 'origin'
     iata = db.Column(db.String(3), primary_key=True)
     city = db.Column(db.String(10), nullable=False)
     state = db.Column(db.String(5), nullable=False)
@@ -32,6 +33,7 @@ class Origins(db.Model):
         self.state = state
 
 class Dests(db.Model):
+    __bind_key__ = 'dest'
     iata = db.Column(db.String(3), primary_key=True)
     city = db.Column(db.String(10), nullable=False)
     state = db.Column(db.String(5), nullable=False)
@@ -68,6 +70,5 @@ def init_db():
         db.session.add(Dests(data_dest.iloc[index]["DEST_IATA"],
             data_dest.iloc[index]["DEST_CITY"],
             data_dest.iloc[index]["DEST_STATE"]))
-
     db.session.commit()
     lg.warning('Database initialized!')
