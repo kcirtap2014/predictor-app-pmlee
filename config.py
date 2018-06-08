@@ -15,7 +15,7 @@ if os.environ.get('DATABASE_URL') is None:
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_BINDS = {
-        'origin':    './FLpredictorapp/origin.db',
-        'dest':      './FLpredictorapp/dest.db'
+        'origin':    os.environ['DATABASE_URL'],
+        'dest':      os.environ['DATABASE_URL']
     }
     DATABASE_URI = './FLpredictorapp/static/db/'
