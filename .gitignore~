@@ -3,6 +3,8 @@ env/
 __pycache__
 fbapp/static/*.jpg
 app.db
+origin.db
+dest.db
 geckodriver.log
 .cache/
 fbapp/
