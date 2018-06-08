@@ -12,9 +12,7 @@
 
       <form action="{{url_for("result")}}" method = "post">
          <fieldset>
-            <legend style = "font-size:40px;
-            font-weight:bolder;
-            text-center; ">{{title}}</legend>
+            <legend >{{title}}</legend>
             {{ form.hidden_tag() }}
 
             <div >
@@ -42,7 +40,15 @@
                 <input type="checkbox"  disabled />
                 {% endif %}
                 <div>Predicted delay</div>
-                    <a>{{y_pred}} min (+/-{{rmse_score_test}} min)</a>
+                    {% if y_delayed: %}
+                    <a><font color="red">Delayed [{{y_pred}} min (&#xB1;{{rmse_score_test}} min)]</font></a>
+                    {% else: %}
+                    <a><font color="green">On time [{{y_pred}} min (&#xB1;{{rmse_score_test}} min)]</font></a>
+                    {% endif %}
+                <br>
+                {% if not flight_exist:%}
+                    <a style= "font-size:14px;"> <font color="red">Warning: Flight connection does not exist.</font></a>
+                {% endif %}
 
             </div>
 

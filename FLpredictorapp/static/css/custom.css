@@ -1,6 +1,6 @@
 form {
     margin: 0 auto;
-    width: 300px;
+    width: 400px;
     height: 400px;
     font-size: 30px;
     font-weight: bold;
@@ -17,7 +17,7 @@ select {
     border-color:  black;
     padding: 5px;
     display: -webkit-box;
-    text-indent:  inherit;
+    text-indent: inherit;
 }
 
 input {
@@ -41,7 +41,6 @@ input[type="checkbox"] {
 }
 
 input#submit {
-    margin:0 auto;
     font-size: 20px;
     font-weight: bold;
     text-align: justify;
@@ -51,4 +50,10 @@ input#submit {
 a {
     font-size: 20px;
     font-weight: normal;
+}
+
+legend {
+    font-size: 40px;
+    font-weight: bolder;
+    text-align: center;
 }

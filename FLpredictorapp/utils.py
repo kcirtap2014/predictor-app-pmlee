@@ -2,15 +2,19 @@ import pandas as pd
 import logging as lg
 import numpy as np
 
-from .models import  load_joblib, load_data
+from .models import load_joblib, load_data, Airports, Origins, Dests
 
-def origin_dest_list(df):
-    origin_col = ["ORIGIN_IATA", "ORIGIN_CITY", "ORIGIN_STATE"]
-    dest_col = ["DEST_IATA", "DEST_CITY", "DEST_STATE"]
-    df_origin = df.drop_duplicates(subset=["ORIGIN_IATA"])[origin_col]
-    df_dest = df.drop_duplicates(subset=["DEST_IATA"])[dest_col]
+def airport_list():
+    origin_list = []
+    dest_list = []
 
-    return df_origin, df_dest
+    for airport in Origins.query.all():
+        origin_list.append([airport.iata, airport.city, airport.state])
+
+    for airport in Dests.query.all():
+        dest_list.append([airport.iata, airport.city, airport.state])
+
+    return origin_list, dest_list
 
 def load_models(departed):
     if departed=="True":
@@ -61,24 +65,57 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
         input_vector[input_columns['CARRIER_'+str(carrier)]] = 1
     except:
         pass
+    # check for existence of the flight
+    flight_exist = (Airports.query.filter(Airports.origin==str(origin_iata),
+                                      Airports.dest==str(dest_iata),
+                                      Airports.carrier==str(carrier)).
+                                      scalar() is not None)
 
+    # Prepare input vector
     df_delay = df[(df.ORIGIN==str(origin_iata)) & (df.DEST==str(dest_iata))]
-    input_vector[input_columns['ORIGIN_DEGREE']] = int(df_delay['ORIGIN_DEGREE'])
-    input_vector[input_columns['DEST_DEGREE']] = int(df_delay['DEST_DEGREE'])
+    df_origin_degree = df[df.ORIGIN==str(origin_iata)]['ORIGIN_DEGREE'].unique()[0]
+    df_dest_degree = df[df.DEST==str(dest_iata)]["DEST_DEGREE"].unique()[0]
+    input_vector[input_columns['ORIGIN_DEGREE']] = int(df_origin_degree)
+    input_vector[input_columns['DEST_DEGREE']] = int(df_dest_degree)
 
     for feature in delay_features:
-        input_vector[input_columns['MEDIAN_'+ feature]] = df_delay['MEDIAN_'+ feature]
-        input_vector[input_columns['MEAN_'+ feature]] = df_delay['MEAN_'+ feature]
-        input_vector[input_columns['Q0_'+ feature]] = df_delay['Q0_'+ feature]
-        input_vector[input_columns['Q1_'+ feature]] = df_delay['Q1_'+ feature]
-        input_vector[input_columns['Q3_'+ feature]] = df_delay['Q3_'+ feature]
-        input_vector[input_columns['Q95_'+ feature]] = df_delay['Q95_'+ feature]
+        #if df_delay is empty, we will imputate values with the median of
+        # df[feature]
+        if df_delay.empty:
+            input_vector[input_columns['MEDIAN_'+ feature]] = df['MEDIAN_'+ feature].median()
+            input_vector[input_columns['MEAN_'+ feature]] = df['MEAN_'+ feature].median()
+            input_vector[input_columns['Q0_'+ feature]] = df['Q0_'+ feature].median()
+            input_vector[input_columns['Q1_'+ feature]] = df['Q1_'+ feature].median()
+            input_vector[input_columns['Q3_'+ feature]] = df['Q3_'+ feature].median()
+            input_vector[input_columns['Q95_'+ feature]] = df['Q95_'+ feature].median()
 
-        if departed=="True" and feature != "ARR_DELAY":
-            input_vector[input_columns[feature]] = df_delay[feature]
+            if departed=="True" and feature != "ARR_DELAY":
+                input_vector[input_columns[feature]] = df[feature].median()
+
+        else:
+            input_vector[input_columns['MEDIAN_'+ feature]] = df_delay['MEDIAN_'+ feature]
+            input_vector[input_columns['MEAN_'+ feature]] = df_delay['MEAN_'+ feature]
+            input_vector[input_columns['Q0_'+ feature]] = df_delay['Q0_'+ feature]
+            input_vector[input_columns['Q1_'+ feature]] = df_delay['Q1_'+ feature]
+            input_vector[input_columns['Q3_'+ feature]] = df_delay['Q3_'+ feature]
+            input_vector[input_columns['Q95_'+ feature]] = df_delay['Q95_'+ feature]
+
+            if departed=="True" and feature != "ARR_DELAY":
+                input_vector[input_columns[feature]] = df_delay[feature]
 
     # prediction
     y_pred = model.predict(input_vector.reshape(1, -1))
 
-    return y_pred, rmse_score_test
+    # delay threshold
+    y_delay = y_pred + rmse_score_test
+
+    if departed=="True":
+        #we consider the threshold to be 15 in the case of departed flight
+        y_delay_thr = 15.
+    else:
+        y_delay_thr = 30.
+
+    y_delayed = y_pred + rmse_score_test> y_delay_thr
+
+    return y_pred, rmse_score_test, flight_exist, y_delayed
     #prediction = model.predict()
