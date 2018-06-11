@@ -26,22 +26,26 @@ class Origins(db.Model):
     iata = db.Column(db.String(3), primary_key=True)
     city = db.Column(db.String(10), nullable=False)
     state = db.Column(db.String(5), nullable=False)
+    degree = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, iata, city, state):
+    def __init__(self, iata, city, state, degree):
         self.iata = iata
         self.city = city
         self.state = state
+        self.degree = degree
 
 class Dests(db.Model):
     __bind_key__ = 'dest'
     iata = db.Column(db.String(3), primary_key=True)
     city = db.Column(db.String(10), nullable=False)
     state = db.Column(db.String(5), nullable=False)
+    degree = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, iata, city, state):
+    def __init__(self, iata, city, state, degree):
         self.iata = iata
         self.city = city
         self.state = state
+        self.degree = degree
 
 def load_data(filename):
     data = pd.read_csv(CONFIG.DATABASE_URI+filename)
@@ -64,11 +68,13 @@ def init_db():
     for index in range(len(data_origin)):
         db.session.add(Origins(data_origin.iloc[index]["ORIGIN_IATA"],
             data_origin.iloc[index]["ORIGIN_CITY"],
-            data_origin.iloc[index]["ORIGIN_STATE"]))
+            data_origin.iloc[index]["ORIGIN_STATE"],
+            data_origin.iloc[index]["ORIGIN_DEGREE"]))
 
     for index in range(len(data_dest)):
         db.session.add(Dests(data_dest.iloc[index]["DEST_IATA"],
             data_dest.iloc[index]["DEST_CITY"],
-            data_dest.iloc[index]["DEST_STATE"]))
+            data_dest.iloc[index]["DEST_STATE"],
+            data_dest.iloc[index]["DEST_DEGREE"]))
     db.session.commit()
     lg.warning('Database initialized!')

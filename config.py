@@ -15,7 +15,7 @@ if os.environ.get('DATABASE_URL') is None:
 else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_BINDS = {
-        'origin':    './origin.db',
-        'dest':      './dest.db'
+        'origin': os.environ['HEROKU_POSTGRESQL_GOLD_URL'],
+        'dest': os.environ['HEROKU_POSTGRESQL_GRAY_URL']
     }
     DATABASE_URI = './FLpredictorapp/static/db/'
