@@ -26,7 +26,7 @@ class Origins(db.Model):
     iata = db.Column(db.String(3), primary_key=True)
     city = db.Column(db.String(30), nullable=False)
     state = db.Column(db.String(5), nullable=False)
-    degree = db.Column(db.Integer, nullable=False)
+    degree = db.Column(db.LargeBinary, nullable=False)
 
     def __init__(self, iata, city, state, degree):
         self.iata = iata
@@ -39,7 +39,7 @@ class Dests(db.Model):
     iata = db.Column(db.String(3), primary_key=True)
     city = db.Column(db.String(30), nullable=False)
     state = db.Column(db.String(5), nullable=False)
-    degree = db.Column(db.Integer, nullable=False)
+    degree = db.Column(db.LargeBinary, nullable=False)
 
     def __init__(self, iata, city, state, degree):
         self.iata = iata

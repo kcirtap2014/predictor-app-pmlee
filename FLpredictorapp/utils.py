@@ -79,7 +79,7 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
                     first().degree)
     dest_degree = (Dests.query.filter(Dests.iata==str(dest_iata)).
                   first().degree)
-    lg.warning(int.from_bytes(origin_degree,byteorder='little')   )
+    lg.warning(origin_degree)
     input_vector[input_columns['ORIGIN_DEGREE']] = int.from_bytes(origin_degree,
                                                    byteorder='little')
     input_vector[input_columns['DEST_DEGREE']] = int.from_bytes(dest_degree,
