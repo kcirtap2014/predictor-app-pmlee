@@ -24,7 +24,7 @@ class Airports(db.Model):
 class Origins(db.Model):
     __bind_key__ = 'origin'
     iata = db.Column(db.String(3), primary_key=True)
-    city = db.Column(db.String(10), nullable=False)
+    city = db.Column(db.String(20), nullable=False)
     state = db.Column(db.String(5), nullable=False)
     degree = db.Column(db.Integer, nullable=False)
 
@@ -37,7 +37,7 @@ class Origins(db.Model):
 class Dests(db.Model):
     __bind_key__ = 'dest'
     iata = db.Column(db.String(3), primary_key=True)
-    city = db.Column(db.String(10), nullable=False)
+    city = db.Column(db.String(20), nullable=False)
     state = db.Column(db.String(5), nullable=False)
     degree = db.Column(db.Integer, nullable=False)
 
