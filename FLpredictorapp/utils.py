@@ -14,7 +14,7 @@ def airport_list():
 
     for airport in Dests.query.all():
         dest_list.append([airport.iata, airport.city, airport.state])
-        
+
     return origin_list, dest_list
 
 def load_models(departed):
@@ -74,10 +74,16 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
 
     # Prepare input vector
     df_delay = df[(df.ORIGIN==str(origin_iata)) & (df.DEST==str(dest_iata))]
-    df_origin_degree = df[df.ORIGIN==str(origin_iata)]['ORIGIN_DEGREE'].unique()[0]
-    df_dest_degree = df[df.DEST==str(dest_iata)]["DEST_DEGREE"].unique()[0]
-    input_vector[input_columns['ORIGIN_DEGREE']] = int(df_origin_degree)
-    input_vector[input_columns['DEST_DEGREE']] = int(df_dest_degree)
+
+    origin_degree = (Origins.query.filter(Origins.iata==str(origin_iata)).
+                    first().degree)
+    dest_degree = (Dests.query.filter(Dests.iata==str(dest_iata)).
+                  first().degree)
+    lg.warning(int.from_bytes(origin_degree,byteorder='little')   )
+    input_vector[input_columns['ORIGIN_DEGREE']] = int.from_bytes(origin_degree,
+                                                   byteorder='little')
+    input_vector[input_columns['DEST_DEGREE']] = int.from_bytes(dest_degree,
+                                                   byteorder='little')
 
     for feature in delay_features:
         #if df_delay is empty, we will imputate values with the median of
