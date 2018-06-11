@@ -69,12 +69,12 @@ def init_db():
         db.session.add(Origins(data_origin.iloc[index]["ORIGIN_IATA"],
             data_origin.iloc[index]["ORIGIN_CITY"],
             data_origin.iloc[index]["ORIGIN_STATE"],
-            data_origin.iloc[index]["ORIGIN_DEGREE"]))
+            int(data_origin.iloc[index]["ORIGIN_DEGREE"])))
 
     for index in range(len(data_dest)):
         db.session.add(Dests(data_dest.iloc[index]["DEST_IATA"],
             data_dest.iloc[index]["DEST_CITY"],
             data_dest.iloc[index]["DEST_STATE"],
-            data_dest.iloc[index]["DEST_DEGREE"]))
+            int(data_dest.iloc[index]["DEST_DEGREE"])))
     db.session.commit()
     lg.warning('Database initialized!')
