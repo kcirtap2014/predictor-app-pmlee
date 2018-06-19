@@ -6,9 +6,17 @@ from .utils import load_data
 import datetime
 
 class AirplaneForm(FlaskForm):
-    origin = SelectField("Origin", validators= [validators.DataRequired()], id="origin", render_kw={"placeholder": "Enter name or code"})
-    dest = SelectField("Destination", validators= [validators.DataRequired()], id="dest", render_kw={"placeholder": "Enter name or code"})
-    carrier = SelectField("Carrier", validators= [validators.DataRequired()], id="carrier",
+    origin = SelectField("Origin",
+                         validators= [validators.DataRequired()],
+                         id="origin",
+                         render_kw={"placeholder": "Enter name or code"})
+    dest = SelectField("Destination",
+                        validators= [validators.DataRequired()],
+                        id="dest",
+                        render_kw={"placeholder": "Enter name or code"})
+    carrier = SelectField("Carrier",
+                          validators= [validators.DataRequired()],
+                          id="carrier",
     choices= [("AA,American Airlines ","American Airlines (AA)"),
                             ("AS,Alaska Airlines","Alaska Airlines (AS)"),
                             ("B6,JetBlue Airways","JetBlue Airways (B6)"),
@@ -21,12 +29,15 @@ class AirplaneForm(FlaskForm):
                             ("UA,United Airlines","United Airlines (UA)"),
                             ("VX,Virgin America","Virgin America (VX)"),
                             ("WN,Southwest Airlines","Southwest Airlines (WN)")])
-    dep_day = DateField("Departure Date", validators= [validators.DataRequired()],
-                    id="dep_date", default=datetime.datetime.today,
-                    format = '%d-%m-%Y')
-    dep_time = TimeField("Departure Time", validators= [validators.DataRequired()],
-                    id="dep_time",
-                    format = '%H:%M')
+    dep_day = DateField("Departure Date",
+                        validators= [validators.DataRequired()],
+                        id="dep_date",
+                        default=datetime.datetime.today,
+                        format = '%d-%m-%Y')
+    dep_time = TimeField("Departure Time",
+                         validators= [validators.DataRequired()],
+                         id="dep_time",
+                         format = '%H:%M')
     departed = BooleanField("Departed", id="departed")
     submit = SubmitField("Submit")
 

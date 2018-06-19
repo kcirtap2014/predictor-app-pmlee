@@ -50,8 +50,19 @@ def predict(origin_iata, dest_iata, date, time, departed, carrier):
     dayofweek = date_pd.dayofweek + 1
     dayofmonth = date_pd.day
 
-    time_features = [ "DEP_TIME_NIGHT", "DEP_TIME_TWILIGHT", "DEP_TIME_MORNING","DEP_TIME_NOON","DEP_TIME_AFTERNOON", "DEP_TIME_EVENING"]
-    delay_features = ['CARRIER_DELAY', 'WEATHER_DELAY', 'NAS_DELAY', 'SECURITY_DELAY', 'LATE_AIRCRAFT_DELAY', 'DEP_DELAY','ARR_DELAY']
+    time_features = [ "DEP_TIME_NIGHT",
+                      "DEP_TIME_TWILIGHT",
+                      "DEP_TIME_MORNING",
+                      "DEP_TIME_NOON",
+                      "DEP_TIME_AFTERNOON",
+                      "DEP_TIME_EVENING"]
+    delay_features = ['CARRIER_DELAY',
+                      'WEATHER_DELAY',
+                      'NAS_DELAY',
+                      'SECURITY_DELAY',
+                      'LATE_AIRCRAFT_DELAY',
+                      'DEP_DELAY',
+                      'ARR_DELAY']
 
     # core core_features
     input_vector[input_columns["DAY_OF_MONTH"]] = int(dayofmonth)
