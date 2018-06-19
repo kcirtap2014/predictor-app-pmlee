@@ -59,8 +59,10 @@ def init_db():
     db.drop_all()
     db.create_all()
     data = load_data("apsearch_US.csv")
-    data_origin = data.drop_duplicates(subset=["ORIGIN_IATA"])
-    data_dest = data.drop_duplicates(subset=["DEST_IATA"])
+    data_origin = (data.drop_duplicates(subset=["ORIGIN_IATA"]).
+                    sort_values(by="ORIGIN_IATA"))
+    data_dest = (data.drop_duplicates(subset=["DEST_IATA"]).
+                    sort_values(by="DEST_IATA"))
     for index in range(len(data)):
         db.session.add(Airports(data.loc[index,"ORIGIN_IATA"],
             data.loc[index,"DEST_IATA"], data.loc[index,"UNIQUE_CARRIER"]))
@@ -69,12 +71,12 @@ def init_db():
         db.session.add(Origins(data_origin.iloc[index]["ORIGIN_IATA"],
             data_origin.iloc[index]["ORIGIN_CITY"],
             data_origin.iloc[index]["ORIGIN_STATE"],
-            int(data_origin.iloc[index]["ORIGIN_DEGREE"])))
+            data_origin.iloc[index]["ORIGIN_DEGREE"]))
 
     for index in range(len(data_dest)):
         db.session.add(Dests(data_dest.iloc[index]["DEST_IATA"],
             data_dest.iloc[index]["DEST_CITY"],
             data_dest.iloc[index]["DEST_STATE"],
-            int(data_dest.iloc[index]["DEST_DEGREE"])))
+            data_dest.iloc[index]["DEST_DEGREE"]))
     db.session.commit()
     lg.warning('Database initialized!')

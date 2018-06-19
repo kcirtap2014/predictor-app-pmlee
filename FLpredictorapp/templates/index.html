@@ -10,7 +10,7 @@
          <div>{{ message }}</div>
       {% endfor %}
 
-      <form action="{{url_for("result")}}" method = "post">
+      <form action="{{url_for("result")}}" method = "POST">
          <fieldset>
             <legend >{{title}}</legend>
             {{ form.hidden_tag() }}

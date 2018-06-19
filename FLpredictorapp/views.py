@@ -18,14 +18,18 @@ def index():
     form = AirplaneForm()
     origin_airports, dest_airports = airport_list()
 
-    form.origin.choices = [(airport[0]+","+airport[1]+","+airport[2], airport[0]+ " ("+airport[1]+", "+airport[2]+")") for airport in origin_airports]
+    form.origin.choices = ([(airport[0]+","+airport[1]+","+airport[2],
+                           airport[0]+ " ("+airport[1]+", "+airport[2]+")")
+                           for airport in origin_airports])
 
-    form.dest.choices = [(airport[0]+","+airport[1]+","+airport[2], airport[0]+ " ("+airport[1]+", "+airport[2]+")") for airport in dest_airports]
+    form.dest.choices = ([(airport[0]+","+airport[1]+","+airport[2],
+                        airport[0]+ " ("+airport[1]+", "+airport[2]+")")
+                        for airport in dest_airports])
 
     if request.method == 'POST':
         if form.validate() == False:
             flash('All fields are required.')
-            return render_template('contact.html',
+            return render_template('index.html',
                                     title = "Airline Delay Predictor",
                                     form = form)
         else:
